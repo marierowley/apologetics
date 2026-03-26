@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Apologetics">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="manifest" id="pwa-manifest">
+<!-- Inline SVG favicon -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230a0a0a'/%3E%3Ctext x='90' y='125' text-anchor='middle' font-size='90' fill='%23c9a84c'%3E✝%3C/text%3E%3C/svg%3E">
+<title>Jesus Is God — Apologetics</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg: #0a0a0a;
+  --surface: #0d0d0d;
+  --surface2: #111;
+  --gold: #c9a84c;
+  --gold-dim: #8a6e2e;
+  --gold-faint: rgba(201,168,76,0.07);
+  --purple: #7c5cbf;
+  --purple-dim: #4a3a72;
+  --blue: #3a6b8a;
+  --blue-dim: #2a4a60;
+  --teal: #2a6a50;
+  --teal-dim: #1e4a38;
+  --teal-text: #5a9a78;
+  --violet: #5a3a6a;
+  --violet-dim: #3a2050;
+  --cream: #d4d0c8;
+  --muted: #555;
+  --border: #1e1e1e;
+}
+
+body {
+  background: var(--bg);
+  font-family: 'DM Mono', monospace;
+  color: var(--cream);
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════ */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--bg);
+  border-bottom: 1px solid #1a1a1a;
+  padding: env(safe-area-inset-top, 0px) 0 0;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 12px;
+  gap: 12px;
+}
+.header-title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #777;
+}
+.header-cross {
+  font-size: 16px;
+  color: var(--gold-dim);
+  opacity: 0.6;
+}
+.header-btns {
+  display: flex;
+  gap: 7px;
+}
+.ctrl-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  padding: 6px 11px;
+  border-radius: 20px;
+  cursor: pointer;
+  border: 1px solid;
+  background: transparent;
+  white-space: nowrap;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+.btn-l2 { border-color: var(--blue); color: #4a8aaa; }
+.btn-l3 { border-color: var(--teal); color: #3a7a60; }
+
+/* ══════════════════════════════════════════
+   SPINE BANNER
+══════════════════════════════════════════ */
+.spine-banner {
+  padding: 13px 18px;
+  border-bottom: 1px solid #141414;
+  background: #0d0d0d;
+}
+.spine-label {
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #333;
+  margin-bottom: 6px;
+}
+.spine-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: #4a4030;
+  line-height: 1.7;
+}
+.spine-text em { font-style: normal; color: var(--gold-dim); }
+
+/* ══════════════════════════════════════════
+   DESKTOP: HORIZONTAL TREE
+══════════════════════════════════════════ */
+.desktop-tree {
+  display: none;
+  padding: 32px 36px 60px;
+  min-width: max-content;
+  overflow-x: auto;
+}
+.tree { display: flex; align-items: flex-start; }
+
+.node-row-h { display: flex; align-items: center; margin: 4px 0; }
+.node {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 13px; border-radius: 20px; cursor: pointer;
+  font-size: 11.5px; letter-spacing: 0.02em; white-space: nowrap;
+  transition: all 0.15s ease; user-select: none;
+  font-family: 'DM Mono', monospace;
+}
+.node:hover { filter: brightness(1.3); transform: translateX(2px); }
+.node .arr { font-size: 8px; opacity: 0.5; transition: transform 0.2s; margin-left: 2px; }
+.node.open .arr { transform: rotate(90deg); }
+.l0-d { background: #f0ece0; color: #0a0a0a; font-size: 13px; padding: 8px 20px; font-family: 'Crimson Pro', serif; cursor: default; }
+.l1-d { background: #13101f; border: 1px solid var(--purple-dim); color: #b8a8e0; }
+.l1-d:hover { border-color: var(--purple); }
+.l1-d.open { border-color: var(--purple); background: #1a1428; }
+.l2-d { background: #0c1520; border: 1px solid var(--blue-dim); color: #7aafe0; }
+.l2-d:hover { border-color: var(--blue); }
+.l2-d.open { border-color: var(--blue); background: #0f1e2e; }
+.l3-d { background: #091510; border: 1px solid var(--teal-dim); color: var(--teal-text); font-size: 10.5px; }
+.l3-d:hover { border-color: var(--teal); color: #7abf98; transform: translateX(2px); }
+.l3-d .dot-hint { width: 4px; height: 4px; border-radius: 50%; background: #2a5a44; flex-shrink: 0; margin-left: 4px; }
+
+.talk-node-d {
+  background: #120f08; border: 1px solid #4a3a10; color: #9a7e3a;
+  font-size: 10.5px; font-style: italic; font-family: 'Crimson Pro', serif;
+  max-width: 320px; white-space: normal; line-height: 1.5;
+  padding: 8px 14px; border-radius: 10px; cursor: default;
+}
+.talk-note-d { margin-top: 4px; font-size: 9.5px; color: #3a3020; font-style: normal; font-family: 'DM Mono', monospace; }
+
+.h-line-d { height: 1px; background: #1e1e1e; flex-shrink: 0; }
+.h-line-d.s { width: 20px; } .h-line-d.m { width: 28px; } .h-line-d.l { width: 36px; }
+.v-bracket-d { display: flex; flex-direction: column; position: relative; margin-left: 8px; padding-left: 16px; }
+.v-bracket-d::before { content: ''; position: absolute; left: 0; top: 13px; bottom: 13px; width: 1px; background: #1e1e1e; }
+.ch-d { display: none; flex-direction: column; }
+.ch-d.open { display: flex; }
+.talk-panel-d { display: none; margin: 3px 0 3px 20px; }
+.talk-panel-d.open { display: flex; align-items: flex-start; }
+
+/* ══════════════════════════════════════════
+   MOBILE: VERTICAL ACCORDION
+══════════════════════════════════════════ */
+.mobile-tree {
+  display: block;
+  padding: 12px 0 80px;
+}
+
+/* L1 SECTION */
+.m-section {
+  border-bottom: 1px solid #141414;
+  overflow: hidden;
+}
+.m-l1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  cursor: pointer;
+  user-select: none;
+  min-height: 52px;
+  background: var(--bg);
+  transition: background 0.15s;
+}
+.m-l1:active { background: #111; }
+.m-l1-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple-dim); flex-shrink: 0; transition: background 0.2s; }
+.m-section.open .m-l1-dot { background: var(--purple); }
+.m-l1-label { font-size: 12.5px; color: #b8a8e0; flex: 1; letter-spacing: 0.02em; }
+.m-l1-arr { font-size: 9px; color: var(--purple-dim); transition: transform 0.25s; flex-shrink: 0; }
+.m-section.open .m-l1-arr { transform: rotate(90deg); }
+
+/* L1 TALK TRACK */
+.m-l1-talk {
+  display: none;
+  padding: 12px 18px 12px 36px;
+  border-top: 1px solid #141414;
+  background: #0d0b08;
+}
+.m-section.open .m-l1-talk { display: block; }
+.m-talk-label { font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 7px; opacity: 0.7; }
+.m-talk-text {
+  font-family: 'Crimson Pro', serif; font-size: 14px; font-style: italic;
+  color: #9a7e3a; line-height: 1.7;
+}
+.m-talk-note { margin-top: 8px; font-size: 9px; color: #3a3020; letter-spacing: 0.03em; }
+
+/* L1 CHILDREN */
+.m-l1-children { display: none; background: #0a0a0a; }
+.m-section.open .m-l1-children { display: block; }
+
+/* L2 BRANCH */
+.m-branch {
+  border-top: 1px solid #111;
+  overflow: hidden;
+}
+.m-l2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 18px 11px 28px;
+  cursor: pointer;
+  user-select: none;
+  min-height: 46px;
+  transition: background 0.15s;
+}
+.m-l2:active { background: #0c1520; }
+.m-l2-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-dim); flex-shrink: 0; transition: background 0.2s; }
+.m-branch.open .m-l2-dot { background: var(--blue); }
+.m-l2-label { font-size: 11.5px; color: #7aafe0; flex: 1; letter-spacing: 0.01em; }
+.m-l2-arr { font-size: 8px; color: var(--blue-dim); transition: transform 0.25s; flex-shrink: 0; }
+.m-branch.open .m-l2-arr { transform: rotate(90deg); }
+
+/* L2 TALK TRACK */
+.m-l2-talk {
+  display: none;
+  padding: 12px 18px 12px 38px;
+  border-top: 1px solid #0f1520;
+  background: #0a1018;
+}
+.m-branch.open .m-l2-talk { display: block; }
+.m-l2-talk .m-talk-text { font-size: 13.5px; color: #7a9ab8; }
+.m-l2-talk .m-talk-label { color: var(--blue-dim); }
+
+/* L2 CHILDREN */
+.m-l2-children { display: none; background: #080d08; }
+.m-branch.open .m-l2-children { display: block; }
+
+/* L3 LEAF */
+.m-leaf {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px 10px 40px;
+  border-top: 1px solid #0d0d0d;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.15s;
+  position: relative;
+}
+.m-leaf:active { background: #091510; }
+.m-leaf-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal-dim); flex-shrink: 0; }
+.m-leaf-label { font-size: 10.5px; color: var(--teal-text); flex: 1; line-height: 1.4; letter-spacing: 0.01em; }
+.m-leaf-hint { font-size: 8px; color: var(--teal-dim); flex-shrink: 0; opacity: 0.6; }
+
+/* L4 DETAIL PANEL (tap to expand inline on mobile) */
+.m-detail {
+  display: none;
+  padding: 10px 18px 12px 55px;
+  background: #070810;
+  border-top: 1px solid #0e0e18;
+}
+.m-leaf.open + .m-detail { display: block; }
+.m-detail-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px; font-style: italic;
+  color: #9a78c0; line-height: 1.65;
+}
+.m-detail-text em { font-style: normal; color: #c8a8e8; }
+
+/* ══════════════════════════════════════════
+   DESKTOP L4 TOOLTIP
+══════════════════════════════════════════ */
+.l4-popup {
+  display: none; position: fixed; z-index: 500;
+  max-width: 300px; background: #100a18;
+  border: 1px solid var(--violet-dim); border-radius: 10px;
+  padding: 12px 16px; pointer-events: none;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+}
+.l4-popup.visible { display: block; }
+.l4-popup-label { font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--violet-dim); margin-bottom: 7px; }
+.l4-popup-text { font-family: 'Crimson Pro', serif; font-size: 13.5px; font-style: italic; color: #9a78c0; line-height: 1.65; }
+.l4-popup-text em { font-style: normal; color: #c8a8e8; }
+
+/* ══════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════ */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92); z-index: 999;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: #0d0b09;
+  border: 1px solid #2a2218;
+  border-radius: 18px 18px 0 0;
+  width: 100%;
+  max-width: 720px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.modal-handle {
+  width: 36px; height: 4px; background: #333; border-radius: 2px;
+  margin: 10px auto 0; flex-shrink: 0;
+}
+.modal-header {
+  padding: 14px 22px 12px;
+  border-bottom: 1px solid #1a1610;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-shrink: 0;
+}
+.modal-title { font-family: 'Crimson Pro', serif; font-size: 11px; font-weight: 300; letter-spacing: 0.16em; text-transform: uppercase; color: #4a3a10; }
+.modal-close { background: none; border: none; color: #444; cursor: pointer; font-size: 18px; padding: 4px 8px; min-height: 36px; }
+.modal-body { overflow-y: auto; padding: 22px 22px 32px; flex: 1; -webkit-overflow-scrolling: touch; }
+.modal-body::-webkit-scrollbar { display: none; }
+
+.flow-section { margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid #141210; }
+.flow-section:last-of-type { border-bottom: none; margin-bottom: 0; }
+.flow-node-label { font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #3a2e10; margin-bottom: 9px; }
+.flow-talk { font-family: 'Crimson Pro', serif; font-size: 15px; font-style: italic; color: #a08840; line-height: 1.8; }
+.flow-talk em { font-style: normal; color: #c8a850; }
+.flow-bullets { margin-top: 10px; list-style: none; }
+.flow-bullets li { font-size: 11px; color: #4a7a60; padding: 4px 0 4px 14px; position: relative; line-height: 1.5; }
+.flow-bullets li::before { content: '—'; position: absolute; left: 0; color: #2a5040; font-size: 9px; }
+
+.modal-summary { margin-top: 28px; padding: 20px 22px; background: #100d08; border: 1px solid #2a2010; border-radius: 10px; }
+.modal-summary-label { font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #3a2e10; margin-bottom: 12px; }
+.modal-summary-text { font-family: 'Crimson Pro', serif; font-size: 16px; font-style: italic; color: #b89040; line-height: 1.85; }
+.modal-summary-text em { font-style: normal; color: #e0b860; }
+.modal-summary-close {
+  display: block; margin: 22px auto 0; font-family: 'DM Mono', monospace;
+  font-size: 9.5px; letter-spacing: 0.1em; color: #3a3020;
+  background: transparent; border: 1px solid #2a2010; border-radius: 20px;
+  padding: 8px 24px; cursor: pointer; min-height: 36px;
+}
+
+/* ══════════════════════════════════════════
+   LEGEND (mobile only, bottom)
+══════════════════════════════════════════ */
+.legend-bar {
+  display: none;
+  padding: 8px 18px;
+  border-top: 1px solid #141414;
+  background: #0d0d0d;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.leg { display: flex; align-items: center; gap: 5px; font-size: 9px; color: #333; }
+.leg-dot { width: 5px; height: 5px; border-radius: 50%; }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE BREAKPOINT
+══════════════════════════════════════════ */
+@media (min-width: 768px) {
+  .desktop-tree { display: block; }
+  .mobile-tree { display: none; }
+  .legend-bar { display: none; }
+  .modal { border-radius: 14px; max-height: 88vh; margin: auto; }
+  .modal-overlay { align-items: center; padding: 32px 24px; }
+  .modal-handle { display: none; }
+  .header-inner { padding: 20px 36px 16px; }
+  .spine-banner { padding: 14px 36px; }
+  .spine-text { font-size: 13.5px; max-width: 900px; }
+}
+
+@media (max-width: 767px) {
+  .legend-bar { display: flex; }
+}
+</style>
+</head>
+<body>
+
+<!-- L4 TOOLTIP (desktop only) -->
+<div class="l4-popup" id="l4-popup">
+  <div class="l4-popup-label">detail</div>
+  <div class="l4-popup-text" id="l4-popup-text"></div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="header-cross">✝</span>
+      <span class="header-title">Apologetics</span>
+    </div>
+    <div class="header-btns">
+      <button class="ctrl-btn btn-l2" onclick="openModal('l2')">▶ layer 2</button>
+      <button class="ctrl-btn btn-l3" onclick="openModal('l3')">▶ layer 3</button>
+    </div>
+  </div>
+  <!-- Legend desktop -->
+  <div style="display:none;gap:16px;padding:0 36px 12px;flex-wrap:wrap;" id="desktop-legend">
+    <div class="leg"><div class="leg-dot" style="background:#7c5cbf"></div>argument</div>
+    <div class="leg"><div class="leg-dot" style="background:#3a6b8a"></div>evidence</div>
+    <div class="leg"><div class="leg-dot" style="background:#2a6a50"></div>detail</div>
+    <div class="leg"><div class="leg-dot" style="background:#8a6e2e"></div>conversation</div>
+    <div class="leg"><div class="leg-dot" style="background:#5a3a6a"></div>hover for depth</div>
+  </div>
+</div>
+
+<!-- SPINE BANNER -->
+<div class="spine-banner">
+  <div class="spine-label">The spine — say this to anyone</div>
+  <div class="spine-text">
+    "The universe had a beginning — and beginnings need causes. Whatever caused all time, space, and matter had to exist outside of those things — timeless, spaceless, immensely powerful.
+    <em>(Some people call that nothing.)</em>
+    That sounds exactly like God.
+    So the real question becomes: would God show up? And the most extraordinary claim in all of human history is that He did. One man, in a specific place, at a specific time, claimed to be God in the flesh. <em>(No philosopher, no prophet, no founder of any religion ever said anything like that.)</em> And then He did something no one else has ever done: He rose from the dead — verified by over 500 eyewitnesses, documented by hostile historians, and never once successfully refuted.
+    The resurrection of that man didn't just prove His divinity — <em>it is proof that death itself has been defeated on our behalf.</em>
+    So everything He said carries the weight of God Himself — including affirming the Scriptures. This means the Bible isn't just the most historically verified set of ancient documents in existence. It is the record of God's rescue, written by the people who witnessed it firsthand. It is the record of God's own words made flesh. And it is the record of God's living voice, still speaking.
+    <em>This all leaves one conclusion: The Bible is the Word of God. He exists. And His name is Jesus.</em>"
+  </div>
+</div>
+
+<!-- MOBILE LEGEND -->
+<div class="legend-bar">
+  <div class="leg"><div class="leg-dot" style="background:#7c5cbf"></div>argument</div>
+  <div class="leg"><div class="leg-dot" style="background:#3a6b8a"></div>evidence</div>
+  <div class="leg"><div class="leg-dot" style="background:#2a6a50"></div>detail (tap)</div>
+  <div class="leg"><div class="leg-dot" style="background:#8a6e2e"></div>conversation</div>
+</div>
+
+<!-- DESKTOP TREE -->
+<div class="desktop-tree" id="desktop-tree"></div>
+
+<!-- MOBILE TREE -->
+<div class="mobile-tree" id="mobile-tree"></div>
+
+<!-- MODAL L2 -->
+<div class="modal-overlay" id="modal-l2">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">Layer 2 — Full Argument in Flow</div>
+      <button class="modal-close" onclick="closeModal('l2')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-l2-body"></div>
+  </div>
+</div>
+
+<!-- MODAL L3 -->
+<div class="modal-overlay" id="modal-l3">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">Layer 3 — Every Argument, Every Detail</div>
+      <button class="modal-close" onclick="closeModal('l3')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-l3-body"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════
+const data = {
+  label: "Jesus Is God", level: 0,
+  children: [
+    {
+      label: "Does God Exist?", level: 1,
+      talk: "Here's the thing — I'm not asking you to take a leap of faith. I'm asking you to follow the evidence. The universe had a beginning. Beginnings require causes. And whatever caused all of time, space, and matter couldn't be made of those things — so it had to be timeless, spaceless, and immensely powerful. That's not theology. That's just logic.",
+      note: "Start here. Let this land before going anywhere else.",
+      children: [
+        { label: "Cosmological Argument", level: 2,
+          talk: "Everything that begins to exist has a cause — not everything, just things that begin. The universe began. The Big Bang is mainstream science, not theology. The cause has to be uncaused, eternal, and personal — impersonal forces don't choose to create.",
+          children: [
+            { label: "Everything that begins to exist has a cause", level: 3, detail: "The Kalam argument doesn't say everything has a cause — it says everything that <em>begins</em> to exist does. This rules out the 'who made God?' objection: God, by definition, never began. He is eternal and uncaused." },
+            { label: "Universe began — BGV theorem closes the infinite past loop", level: 3, detail: "The Borde-Guth-Vilenkin theorem (2003) proves that any universe with expanding space must have had an absolute beginning — even a multiverse. This closes the 'infinite past' escape hatch that atheists previously relied on." },
+            { label: "Cause must be timeless, spaceless, immensely powerful", level: 3, detail: "Since the cause created time, space, and matter, it must exist outside all three. That means it is timeless, spaceless, immaterial, and immensely powerful — sufficient to create everything from nothing." },
+            { label: "Must be personal — impersonal forces don't choose to act", level: 3, detail: "An impersonal cause — a force, a law, a mechanism — operates when conditions are met. It cannot choose to act. So if the cause of the universe is impersonal, the question becomes: what triggered it? If the cause existed eternally in an unchanging state, why did the universe appear at a specific moment and not before? Nothing in the cause changed — so nothing should have changed in the effect. Only a <em>personal agent</em> — a being with will and intention — can exist in an unchanging state and then freely choose to act. The decision comes from within, not from external conditions. This is why the first cause must be personal: it is the only category of cause that can explain why something happened at a specific moment rather than never at all." },
+          ]
+        },
+        { label: "Fine-Tuning", level: 2,
+          talk: "The physical constants are calibrated to 1 in 10^123 for life to exist. Fred Hoyle — a committed atheist — said a superintellect must have 'monkeyed with physics.' The multiverse doesn't solve this — it just multiplies the problem. Design demands a designer.",
+          children: [
+            { label: "Physical constants calibrated to 1 in 10^123", level: 3, detail: "The cosmological constant — the energy density of empty space — is fine-tuned to 1 part in 10^123. If it were larger by even a fraction, the universe would have expanded too fast for galaxies to form. No galaxies means no stars, no planets, no life." },
+            { label: "Fred Hoyle: 'a superintellect has monkeyed with physics'", level: 3, detail: "Fred Hoyle was a committed atheist astronomer. After discovering carbon resonance is precisely calibrated to allow stars to produce life-building elements, he wrote that the evidence pointed to a superintellect behind the physical laws." },
+            { label: "Fibonacci sequence — mathematical order woven into nature", level: 3, detail: "The Fibonacci sequence appears in sunflower seeds, nautilus shells, spiral galaxies, DNA, and leaf arrangements. This mathematical precision at every scale of nature points to an ordering mind, not random process." },
+            { label: "Multiverse requires more faith, not less", level: 3, detail: "The multiverse proposes infinite unobservable universes to explain fine-tuning by chance — but this requires accepting vastly more than a single Designer with no evidence. It also doesn't explain why the laws of physics themselves are fine-tuned." },
+          ]
+        },
+        { label: "Moral Argument", level: 2,
+          talk: "When you say the Holocaust was genuinely wrong — not just unpopular — you're making an objective truth claim. But objective moral truth requires an objective standard. That standard can't come from inside the universe it's judging. It has to come from outside. That's God.",
+          children: [
+            { label: "Objective moral outrage implies an objective standard", level: 3, detail: "Every time someone says something is <em>genuinely</em> wrong, they are appealing to a transcendent moral framework. You cannot call something evil without implicitly appealing to a standard of goodness that exists outside human opinion." },
+            { label: "'No absolute truth' is a self-defeating absolute claim", level: 3, detail: "The statement 'there is no absolute truth' is itself an absolute truth claim. It defeats itself the moment you say it. Relativism cannot be consistently held without using the very objective truth it denies." },
+            { label: "Without God, morality is just whoever holds power", level: 3, detail: "If morality is purely social construction, every society that endorsed slavery was morally correct by their own standard. We have no grounds to say otherwise — reducing morality to the preferences of whoever currently holds power." },
+            { label: "C.S. Lewis: can't call a line crooked without a straight one", level: 3, detail: "Lewis: 'My argument against God was that the universe seemed unjust. But how did I get the idea of just and unjust? A man does not call a line crooked unless he has some idea of a straight line.' His own objection presupposed God." },
+          ]
+        },
+        { label: "Consciousness", level: 2,
+          talk: "Materialism cannot explain why there's something it's like to be you. Chemistry can produce behaviour — it cannot produce the sensation of red, or the feeling of love. Consciousness points to a mind behind the universe, not just a mechanism.",
+          children: [
+            { label: "Materialism can't explain subjective experience", level: 3, detail: "The 'hard problem of consciousness' (David Chalmers): science can explain brain function but cannot explain <em>why</em> there is any subjective experience at all. Why does anything feel like something? This remains entirely unexplained by physical processes." },
+            { label: "Reason itself implies a rational ground to reality", level: 3, detail: "C.S. Lewis: if our minds are purely the product of irrational material processes, we have no reason to trust them — including the reasoning we use to conclude materialism is true. Reliable reason implies a rational ground: God." },
+          ]
+        },
+      ]
+    },
+    {
+      label: "Would God Stay Silent?", level: 1,
+      talk: "Every relationship involves communication. A personal God who stays permanently hidden contradicts His own nature. Every culture in history — without exception — has reached upward. That universal reach isn't coincidence. It's a signal. And signals exist because something is transmitting.",
+      note: "This is the bridge. Don't skip it — it makes Jesus feel inevitable rather than arbitrary.",
+      children: [
+        { label: "A Personal God Communicates", level: 2,
+          talk: "If God is a person — not just a force — silence is a contradiction. You don't create beings made for relationship and then refuse relationship. The question shifts from 'does God exist' to 'where did He speak?'",
+          children: [
+            { label: "Personal beings communicate by nature", level: 3, detail: "Personhood and communication are inseparable. Every person we know expresses themselves. A God who is personal by nature but permanently silent would be unique among all persons in history — a contradiction of His own character." },
+            { label: "Creation itself is communication — Romans 1:20", level: 3, detail: "Paul writes God's 'invisible qualities — His eternal power and divine nature — have been clearly seen, being understood from what has been made.' The universe is already a communication. The question is whether God also spoke more directly — and the answer is yes, in Christ." },
+            { label: "Universal human reach for transcendence is the echo of a voice", level: 3, detail: "Augustine: 'You have made us for yourself, O Lord, and our hearts are restless until they rest in You.' The universal human longing for transcendence is not random — it is the echo of God's voice in the soul." },
+          ]
+        },
+        { label: "Every Culture Reaches Upward", level: 2,
+          talk: "No culture in recorded history has been atheist by default. Every civilisation has reached for something beyond itself — sacrifice, prayer, ritual, worship. That universality is data. Lewis called it the clue in the universe.",
+          children: [
+            { label: "No historically atheist culture exists", level: 3, detail: "Anthropologists have catalogued thousands of human cultures — every single one has some form of religious practice or reach toward the transcendent. Atheism is a modern philosophical position; it has never been the default posture of any culture." },
+            { label: "The longing itself points to something real — appetite implies food", level: 3, detail: "C.S. Lewis: 'If I find in myself a desire which no experience in this world can satisfy, the most probable explanation is that I was made for another world.' Hunger implies food exists. The universal spiritual hunger implies the existence of something that satisfies it." },
+            { label: "Lewis: desire nothing in this world satisfies points elsewhere", level: 3, detail: "This argument from desire is found in Mere Christianity. Lewis is not saying the desire proves heaven — he is saying that the consistent pattern of reality is that natural desires correspond to real things. The desire for God is the most universal natural desire in human history." },
+          ]
+        },
+        { label: "Only One Revelation Is Verifiable", level: 2,
+          talk: "Every major religion claims God spoke. The question is which claim can be examined historically. Islam rests on a private vision. Mormonism rests on plates no one else saw. Christianity alone stakes everything on a publicly witnessed, historically documented event — a resurrection.",
+          children: [
+            { label: "Islam: private vision — no public verification", level: 3, detail: "Muhammad's founding revelation was a private encounter with Gabriel in a cave — witnessed by no one else. Christianity, by contrast, stakes its claim on a publicly witnessed empty tomb and 500+ eyewitnesses to the risen Christ." },
+            { label: "Mormonism: angel with plates — no archaeological confirmation", level: 3, detail: "Joseph Smith claimed an angel led him to golden plates describing advanced American civilisations. No archaeological evidence for these civilisations has been found despite extensive searching." },
+            { label: "Galatians 1:8 — AD 50, preempts Islam and Mormonism", level: 3, detail: "Paul writes in Galatians 1:8: 'Even if an angel from heaven should preach a gospel contrary to what we preached, let him be accursed.' Written AD 50 — 600 years before Islam and 1,800 years before Mormonism. The Bible preemptively addressed both by category." },
+            { label: "Christianity alone built on a falsifiable historical event", level: 3, detail: "Paul says: 'If Christ has not been raised, your faith is futile.' He is inviting falsification. No other major religion stakes its entire credibility on a single verifiable historical event. Christianity is uniquely open to investigation — and uniquely survives it." },
+          ]
+        },
+      ]
+    },
+    {
+      label: "Did God Enter Creation?", level: 1,
+      talk: "The Christian claim is specific: God didn't just send a message — He showed up in person. One man, specific place, specific time, claimed to be God in the flesh. He didn't say 'follow my teachings.' He said 'I am the way, the truth, and the life.' No founder of any religion ever made that claim. And then He did something to back it.",
+      note: "The pivot. You've established God is personal and would reveal Himself. Now Jesus is the only serious candidate.",
+      children: [
+        { label: "The Incarnation Claim", level: 2,
+          talk: "'Before Abraham was, I AM' — using the divine name from Exodus. The Pharisees picked up stones immediately. They understood exactly what He was saying. He forgave sins — which only God can do. He accepted worship — which every other biblical figure immediately refused.",
+          children: [
+            { label: "John 8:58 — 'Before Abraham was, I AM' — divine name", level: 3, detail: "Jesus uses the divine name revealed to Moses — Yahweh, 'I AM WHO I AM' (Exodus 3:14). The Pharisees understood this immediately as a claim to divinity — which is precisely why they picked up stones to stone Him for blasphemy." },
+            { label: "Forgave sins — 'Who can forgive sins but God alone?'", level: 3, detail: "In Mark 2, when Jesus forgives a paralytic, the scribes immediately say 'Who can forgive sins but God alone?' Theologically correct. Jesus didn't correct them — He demonstrated His authority and healed the man to prove the point." },
+            { label: "Accepted worship — every angel and apostle refused it", level: 3, detail: "In Revelation 22, John falls to worship an angel who immediately says 'Worship God!' In Acts 14, Paul tears his clothes when people try to worship him. Jesus never did this — when Thomas said 'My Lord and my God,' Jesus accepted it without correction." },
+            { label: "John 14:6 — 'I am the way, the truth, and the life'", level: 3, detail: "No other religious figure made this claim. Muhammad said 'Follow the teaching.' Buddha said 'Walk the path.' Jesus said 'I AM the way' — not 'I will show you the way.' The claim is about His person, not His teaching. This is without parallel." },
+          ]
+        },
+        { label: "Lewis's Trilemma", level: 2,
+          talk: "C.S. Lewis in Mere Christianity: a man who says the things Jesus said is either a liar, a lunatic, or the Lord. A liar doesn't die for his own lie without recanting. A lunatic doesn't produce the Sermon on the Mount. The 'great moral teacher' position is logically eliminated by what He claimed.",
+          children: [
+            { label: "Liar — knew it was false, died for it without recanting?", level: 3, detail: "If Jesus was a deliberate deceiver, He maintained that deception through flogging, crucifixion, and death — and never once recanted. Liars, when faced with that level of consequence, recant. Dying for a lie you know is false is psychologically implausible." },
+            { label: "Lunatic — yet his moral teaching is unparalleled in history", level: 3, detail: "If Jesus was deluded, we would expect the incoherence of a disturbed mind. Instead we get the Sermon on the Mount, the parables, the Golden Rule. No lunatic produces moral teaching of this calibre. The quality of His thought eliminates this option." },
+            { label: "Lord — the only coherent explanation", level: 3, detail: "Lewis: 'You must make your choice. Either this man was, and is, the Son of God; or else a madman or something worse. You can shut Him up for a fool — or you can fall at His feet and call Him Lord and God.' There is no comfortable middle option." },
+            { label: "'Great teacher' option is logically eliminated by His claims", level: 3, detail: "A great moral teacher does not claim to be God, forgive sins on behalf of the universe, and declare himself the exclusive path to eternal life. Either He was right, or He was not a great moral teacher. The position most people try to hold is precisely the one Lewis shows you cannot." },
+          ]
+        },
+        { label: "No Other Founder Claims This", level: 2,
+          talk: "Muhammad never claimed to be God — he claimed to be a prophet. Buddha never claimed to be God. Confucius never claimed to be God. Jesus alone made this claim. That uniqueness demands a verdict — it can't be quietly filed under 'religion.'",
+          children: [
+            { label: "Muhammad: prophet, not God", level: 3, detail: "Islam is emphatic that Muhammad was a human prophet — 'only a messenger.' The Quran explicitly states he has no divine nature. Jesus and Muhammad are not making equivalent claims — they are categorically different." },
+            { label: "Buddha: enlightened teacher, not God", level: 3, detail: "The historical Buddha never claimed to be God. He claimed to have discovered a path to escape suffering. Early Buddhism is non-theistic. Buddha pointed away from himself toward the dharma. Jesus pointed to Himself." },
+            { label: "Moses, Elijah, Paul — all redirected worship from themselves", level: 3, detail: "Every major biblical figure — Moses, Elijah, Peter, Paul — redirected worship away from themselves and toward God. Jesus is the single exception in all of Scripture. This is not accidental — it is the point." },
+            { label: "Jesus alone accepted the title and the worship", level: 3, detail: "When Nathanael said 'You are the Son of God,' Jesus accepted it. When Thomas said 'My Lord and my God,' Jesus accepted it. This consistent pattern across multiple people and occasions reveals deliberate self-presentation as divine." },
+          ]
+        },
+      ]
+    },
+    {
+      label: "The Resurrection", level: 1,
+      talk: "This is the hinge. Paul: if Christ is not raised, our faith is worthless. Three facts accepted by the vast majority of historians — including skeptical ones: Jesus died by crucifixion. The tomb was empty. Hundreds claimed to see Him alive. The only explanation that fits all three is the resurrection.",
+      note: "Where the case lands. The resurrection is the best historical explanation of the facts.",
+      children: [
+        { label: "The Minimal Facts", level: 2,
+          talk: "Gary Habermas: only use facts accepted by skeptical scholars. Jesus died — Tacitus confirms it. Tomb was empty — enemies never produced a body, and had every reason to. 500+ people saw Him risen. Paul and James — hostile witnesses — converted. People die for what they believe. Nobody dies for what they know is a lie.",
+          children: [
+            { label: "Death by crucifixion — confirmed by Tacitus, Josephus", level: 3, detail: "Roman historian Tacitus (AD 116) writes that Christ 'suffered the extreme penalty during the reign of Tiberius at the hands of Pontius Pilate.' Non-Christian, secular sources confirm the crucifixion — something even the most sceptical historians accept." },
+            { label: "Empty tomb — enemies never produced the body", level: 3, detail: "The Sanhedrin had every motive and means to produce Jesus's body. They never did. Their explanation — that the disciples stole it — implicitly concedes the tomb was empty. You don't accuse someone of stealing what is still there." },
+            { label: "500+ witnesses at once — Paul names them, most still alive", level: 3, detail: "Paul writes in 1 Corinthians 15:6 that Jesus appeared to more than 500 brothers at one time, 'most of whom are still alive.' He is writing while eyewitnesses are living — explicitly inviting verification. This is not the language of fabrication." },
+            { label: "Paul: persecuting Christians → converted after seeing Christ", level: 3, detail: "Saul of Tarsus was actively hunting Christians for execution. His conversion was so dramatic it is accepted even by sceptical historians. The only explanation he gives: he saw the risen Jesus." },
+            { label: "James: Jesus's skeptical brother → died for his faith", level: 3, detail: "During Jesus's ministry, His brothers did not believe in Him (John 7:5). James became a pillar of the Jerusalem church and was executed around AD 62 for his faith. The most natural explanation: he saw the risen Jesus." },
+          ]
+        },
+        { label: "1 Cor 15 Creed — Within 5 Years", level: 2,
+          talk: "Paul's creed in 1 Corinthians 15 is dated to within 3–5 years of the crucifixion. That's not legend — living eyewitnesses were still alive when it circulated. Paul says 'most are still alive' — he's inviting verification. You don't do that if the story is fabricated.",
+          children: [
+            { label: "Creed dated AD 33–35 — eyewitness era, not legend", level: 3, detail: "Scholars date 1 Corinthians 15:3-8 as a pre-Pauline creed Paul received — likely from Peter and James around AD 33–35, just 3–5 years after the crucifixion. First-generation testimony from people who were there." },
+            { label: "'Most are still alive' — open invitation to verify", level: 3, detail: "When Paul says 'most of the 500 are still alive,' he is making a falsifiable claim while those people are living. Any reader could go ask them. Legends don't come with verification instructions." },
+            { label: "Legend requires generations — this has years", level: 3, detail: "Historians accept that legend development requires multiple generations — the people who could contradict the story must have died. The resurrection tradition dates to years, not generations. There was no window for legend to form." },
+          ]
+        },
+        { label: "Alternative Theories Fail", level: 2,
+          talk: "Every alternative has been tried and every one fails. Swoon theory: Roman soldiers were professionals — their lives depended on confirming death. Wrong tomb: authorities would have gone to the right one. Hallucination: 500 group hallucinations don't happen. Legend: too early, living witnesses present.",
+          children: [
+            { label: "Swoon: Roman execution was thorough — soldier's life on the line", level: 3, detail: "Roman soldiers who failed to confirm a prisoner's death faced execution themselves. Jesus was flogged, nailed through hands and feet, pierced with a spear, and a professional soldier certified His death. The swoon theory requires the most thorough soldiers in the ancient world to have made a catastrophic error." },
+            { label: "Wrong tomb: enemies would have corrected this immediately", level: 3, detail: "The wrong tomb theory requires the disciples, the women, the Sanhedrin, and Joseph of Arimathea (who owned the tomb) to all go to the wrong location — and the authorities, who had every reason to produce the body, to somehow also fail. The theory is absurd under scrutiny." },
+            { label: "Hallucination: 500+ group hallucinations don't occur", level: 3, detail: "Hallucinations are private neurological events — they cannot be shared. The idea that 500 people simultaneously hallucinated the same risen Jesus is a psychological impossibility. And hallucinations cannot explain an empty tomb." },
+            { label: "Legend: 3–5 years too short — living witnesses still present", level: 3, detail: "Paul's creed dates to within 3–5 years of the crucifixion, and he names living witnesses. The disciples began proclaiming the resurrection in Jerusalem within weeks — where anyone could visit the tomb and interview witnesses. No window for legend." },
+          ]
+        },
+      ]
+    },
+    {
+      label: "Therefore — Scripture", level: 1,
+      talk: "If Jesus rose from the dead, He is exactly who He said He was. And He said the Scriptures are the Word of God. The Bible's authority doesn't rest on itself — it rests on Jesus. You don't need to start with the Bible to get to Jesus. You start with Jesus, and He takes you to Scripture.",
+      note: "Scripture gets its authority from Christ — not the other way around. This order is deliberate and important. The most common mistake in apologetics is starting with the Bible and trying to prove Jesus from it — which hands the skeptic a veto they were never supposed to have. The early church never argued this way. They had no New Testament. They had an empty tomb and a risen Lord. The writings were recognised as authoritative because of who Jesus was, not the other way around. Always move from the resurrection to Scripture, never from Scripture to the resurrection.",
+      children: [
+        { label: "Jesus Affirmed Scripture", level: 2,
+          talk: "Jesus quoted the Old Testament constantly and treated it as authoritative. He said 'Scripture cannot be broken.' He said 'your word is truth.' If Jesus is God — which the resurrection confirms — then His endorsement of Scripture carries divine weight.",
+          children: [
+            { label: "Jesus quoted OT as authoritative — 'Scripture cannot be broken'", level: 3, detail: "In John 10:35, Jesus says 'Scripture cannot be broken' — making an absolute claim about the reliability and authority of the Old Testament. He quotes Deuteronomy, Isaiah, and Psalms throughout His ministry, treating them as settled and binding." },
+            { label: "'Your word is truth' — John 17:17", level: 3, detail: "In His prayer the night before the crucifixion, Jesus prays: 'Sanctify them in the truth — your word is truth.' Not 'your word is helpful.' God's word and truth are identified with one another." },
+            { label: "Resurrection validates everything He said", level: 3, detail: "The resurrection is the validation mechanism for every claim Jesus ever made. If He rose, He was right about everything — Scripture, salvation, the Father, eternity. Paul's logic in 1 Corinthians 15 is airtight: the resurrection is the hinge on which everything turns." },
+            { label: "The early church argued from resurrection to Scripture — never the reverse", level: 3, detail: "This is one of the most important things to understand about how apologetics actually works. The early disciples had no New Testament. They did not say 'trust these writings, therefore trust Jesus.' They said: we saw Him rise. We touched His hands. He appeared to over 500 of us. The writings came later — and were recognised as authoritative precisely because they were produced by or under the authority of resurrection witnesses. Getting this order backwards is a critical mistake. It positions the Bible as the foundation, which means a skeptic who doubts the Bible now has a veto over Jesus. But if Jesus is the foundation — established by the resurrection independently of any text — then Scripture's authority flows naturally from Him. Always move from the empty tomb to the canon. Never the other way around." },
+          ]
+        },
+        { label: "Manuscript Evidence", level: 2,
+          talk: "The Bible is the most historically verified ancient document in existence — 5,800+ Greek NT manuscripts vs 30 copies of Plato. Earliest fragments within decades of originals. Variants are almost entirely grammatical. J. Warner Wallace: an atheist homicide detective who applied forensic standards to the NT and became a Christian.",
+          children: [
+            { label: "5,800+ Greek NT manuscripts — more than any ancient text", level: 3, detail: "We have over 5,800 Greek manuscripts of the New Testament, plus over 19,000 in other languages. The next closest ancient document is Homer's Iliad with approximately 1,800 copies. No scholar doubts Homer. The NT evidence is in a completely different category." },
+            { label: "Plato: 30 copies. Homer: 1,800. We trust both without question.", level: 3, detail: "We have approximately 7 manuscripts of Plato, 8 of Herodotus, 10 of Julius Caesar. We reconstruct ancient history from these without hesitation. The scepticism applied uniquely to the Bible — with 5,800+ manuscripts — reveals a double standard that has nothing to do with evidence." },
+            { label: "Variants are grammatical only — no doctrinal contradiction", level: 3, detail: "Of approximately 400,000 textual variants across NT manuscripts, the vast majority are spelling differences and word order variations. Scholars estimate variants affecting meaning are less than 1%, and none affect any core Christian doctrine." },
+            { label: "J. Warner Wallace — Cold Case Christianity", level: 3, detail: "J. Warner Wallace was an LA homicide detective and atheist who applied the same forensic standards he used in cold case murder investigations to the New Testament. After examining the evidence, he became a Christian and wrote Cold Case Christianity." },
+          ]
+        },
+        { label: "Fulfilled Prophecy", level: 2,
+          talk: "Isaiah 53 — written 700 years before Jesus — describes the crucifixion in detail. Micah 5:2 names Bethlehem. Psalm 22 describes crucifixion before Rome invented it. Peter Stoner: fulfilling 8 prophecies by chance is 1 in 10^17. Jesus fulfilled over 300. This isn't coincidence. It's authorship.",
+          children: [
+            { label: "Isaiah 53 — suffering servant, 700 BC, describes crucifixion", level: 3, detail: "Isaiah 53 was written approximately 700 BC. It describes a servant 'pierced for our transgressions,' 'led like a lamb to slaughter,' 'assigned a grave with the wicked' but 'with the rich in his death,' who sees 'the light of life' afterward. Written 700 years before the crucifixion." },
+            { label: "Micah 5:2 — Bethlehem named centuries in advance", level: 3, detail: "Micah 5:2, written approximately 700 BC: 'But you, Bethlehem Ephrathah... out of you will come for me one who will be ruler over Israel, whose origins are from of old, from ancient times.' The specific birthplace named seven centuries in advance." },
+            { label: "Psalm 22 — crucifixion detail before Rome invented it", level: 3, detail: "Psalm 22 was written by David around 1000 BC — centuries before Rome invented crucifixion. Yet it describes: 'They pierced my hands and my feet,' 'They divide my garments among them and cast lots for my clothing.' Every detail matches the crucifixion accounts precisely." },
+            { label: "1 in 10^17 for 8 prophecies — Jesus fulfilled 300+", level: 3, detail: "Mathematician Peter Stoner calculated the probability of fulfilling just 8 Messianic prophecies by chance: 1 in 10^17. Cover Texas two feet deep in silver dollars, mark one, blindfold someone — pick the marked coin first try. That's the probability for just 8. Jesus fulfilled over 300." },
+          ]
+        },
+      ]
+    },
+    {
+      label: "Objections", level: 1,
+      talk: "The hardest questions usually come from the deepest pain — not the deepest logic. Lead with the person, not the argument. But every major objection has a serious answer. None are unanswerable. What makes them feel unanswerable is that nobody bothered to answer them.",
+      children: [
+        { label: "Why Must the Cause Be Personal?", level: 2,
+          talk: "This is one of the most common pushbacks on the cosmological argument — and it deserves a direct answer. The cause of the universe has to be either personal or impersonal. Impersonal forces don't choose to act — they react when conditions are met. But there were no prior conditions. Nothing existed before the universe. So whatever started everything had to act from within itself, from will and intention. That's what we mean by personal. It's not a theological assumption smuggled in — it's the only logical category that fits.",
+          children: [
+            { label: "Impersonal forces react — they don't initiate", level: 3, detail: "Gravity pulls whenever mass is present. Magnetism attracts whenever poles align. An impersonal force has no mechanism for choosing to act — it can only respond to conditions. But before the universe, there were no conditions. No matter, no energy, no space, no time. An impersonal cause sitting in an eternal, unchanging void has nothing to trigger it." },
+            { label: "If the cause is eternal and unchanging, why did it act then?", level: 3, detail: "This is the sharp edge of the argument. If the cause existed eternally but the universe appeared at a specific moment — what changed? If the cause is impersonal, nothing in it changed. So nothing should have changed in its effect. The only way to explain a first event is a <em>personal agent</em> who freely chose to act — whose decision came from within rather than from external conditions." },
+            { label: "Personal = a being with will and intention — not a religious claim", level: 3, detail: "Saying the cause must be personal is not importing theology. It is a logical conclusion. Personal does not mean human — it means something with the capacity for intention and choice. A being that can decide to act without being triggered by prior conditions. That description fits exactly one category of cause. And it is what every major theistic tradition has described as God." },
+            { label: "One-line version: only persons act — everything else reacts", level: 3, detail: "The simplest form: every impersonal cause in the universe only reacts — it needs something to set it in motion. Only personal agents initiate. Since the first cause had nothing prior to set it in motion, it had to initiate from within. That means it was personal. The logic doesn't require faith — it requires only consistency." },
+          ]
+        },
+        { label: "Problem of Evil", level: 2,
+          talk: "Evil and suffering actually require God to make sense. To say something is genuinely evil, you need an objective standard of good. Where does that come from without God? And here's the thing — God didn't watch from a distance. He entered the suffering in Christ. The cross is not God's explanation of evil. It's His response to it.",
+          children: [
+            { label: "Evil implies a moral standard — which implies God", level: 3, detail: "The problem of evil is actually an argument for God. To say God is wrong to allow evil, you must have a standard of right and wrong that exists independently. C.S. Lewis realised his own objection presupposed the very God he was arguing against." },
+            { label: "Evil is privation — absence of good, not a created thing", level: 3, detail: "Augustine's answer: evil is a privation — the absence or corruption of good — just as darkness is the absence of light. God did not create evil; He created free creatures who had the capacity to turn away from good, and that turning is evil." },
+            { label: "Free will: forced love is not love", level: 3, detail: "God gave humanity free will because love requires the freedom to choose otherwise. A robot programmed to love does not love. The possibility of evil is the necessary cost of the possibility of genuine love and genuine moral agency." },
+            { label: "The cross: God entered suffering — not His excuse, His response", level: 3, detail: "The Christian answer to evil is personal. God did not observe our suffering from a distance. In Christ, He was betrayed, tortured, and killed. The cross is not God's explanation of why evil exists — it is His personal response to it, absorbing it and promising its ultimate end." },
+          ]
+        },
+        { label: "God Can't Be Fully Good AND Fully Sovereign", level: 2,
+          talk: "This is the sharpest form of the problem of evil. The objection says: if God is fully good He would stop evil; if fully sovereign He could stop evil; since evil exists, He must lack one or the other. But there's a hidden assumption: that a good and sovereign God would eliminate all evil <em>immediately</em>. It doesn't follow. A good surgeon causes pain on the way to healing. Sovereignty and goodness operating over time — toward an ultimate end — look different in the middle than at the finish.",
+          children: [
+            { label: "The objection assumes immediate elimination of evil = goodness", level: 3, detail: "The logical problem of evil assumes a good God must eliminate evil instantly. But goodness operating with wisdom and toward a long-term end looks very different from simply eliminating all discomfort immediately. A good doctor inflicts pain to heal. A good parent allows struggle to build strength." },
+            { label: "Sovereignty means authorship of the whole story — not each chapter", level: 3, detail: "Sovereignty doesn't mean God micromanages every moment to eliminate all pain. It means God is the author of the whole story — and the author's control is seen in the ending. Revelation 21:4: 'He will wipe every tear from their eyes. There will be no more death or mourning or crying or pain.'" },
+            { label: "Romans 8:28 — God works all things together for good", level: 3, detail: "Paul writes: 'We know that in all things God works for the good of those who love Him.' Not that all things are good, but that God works them together for good. Sovereignty expressed through redemptive weaving — taking broken threads and producing something beautiful." },
+            { label: "The cross: worst evil used for the greatest good — the template", level: 3, detail: "The crucifixion is the greatest evil in human history — the murder of the Son of God. It is also the source of the greatest good — the redemption of humanity. God did not prevent it. He used it. This is the template for His sovereignty: He redeems evil rather than eliminating it immediately." },
+          ]
+        },
+        { label: "Science vs Faith", level: 2,
+          talk: "Science asks how. Faith asks why. These aren't competing — they're complementary. The Big Bang was proposed by a Catholic priest. Newton, Faraday, Mendel, Pasteur — founders of modern science, largely Christian. And the Big Bang — something from nothing, with no natural cause — requires the same category of trust as any biblical miracle.",
+          children: [
+            { label: "Science: how · Faith: why — different questions", level: 3, detail: "Science is magnificently equipped to answer questions about mechanism and process. It is entirely unequipped to answer questions about meaning, purpose, and origin from nothing. The conflict between science and faith is largely a category error." },
+            { label: "Big Bang proposed by Fr. Georges Lemaitre — Catholic priest", level: 3, detail: "The Big Bang theory was first proposed by Georges Lemaitre, a Belgian Catholic priest and physicist. Secular scientists initially resisted it precisely because a universe with a beginning sounded too much like Genesis 1:1." },
+            { label: "Founders of modern science were largely Christian", level: 3, detail: "Newton, Faraday, Mendel, Pasteur, Kepler, Boyle — virtually all founding figures of modern science were devout Christians who saw science as exploring God's creation. The idea that science and Christianity are in inherent conflict is historically illiterate." },
+            { label: "Something from nothing = same category as Virgin Birth", level: 3, detail: "The Big Bang requires accepting that all matter, energy, space, and time came into existence from absolute nothing by no natural cause. This is a metaphysical event. If you accept the Big Bang, you have already accepted that something can come from nothing by no natural process — the same category as any biblical miracle." },
+          ]
+        },
+        { label: "Hypocrisy in the Church", level: 2,
+          talk: "You're right that Christians fail — often badly. But Christianity doesn't claim Christians are good people. It claims we're broken people who need a Saviour. Hypocrisy confirms the Christian diagnosis. Judge Christianity by its Founder, not its followers. No one is asked to follow Christians.",
+          children: [
+            { label: "Christianity's claim: we are broken, not good — failure confirms this", level: 3, detail: "Every other major religion teaches humans can become good enough through effort. Christianity alone begins with the diagnosis: we are broken and cannot fix ourselves. Christian hypocrisy is precisely what Christianity predicts — evidence for the diagnosis, not against it." },
+            { label: "Judge the Founder — His record is unblemished", level: 3, detail: "The standard for evaluating Christianity is Jesus. His character, His teaching, His treatment of the poor and outcast — no serious historian has identified a moral failure in Jesus. Reject Christianity on its Founder's merits, not His followers' failures." },
+            { label: "Hospitals, universities, abolition — fruit of genuine Christianity", level: 3, detail: "The hospital system was invented by Christians. The university system was founded by the church. The abolition of slavery in Britain was led by William Wilberforce — explicitly motivated by his Christian faith. The civil rights movement was led from Black churches. This is Christianity actually practiced." },
+          ]
+        },
+        { label: "What About Other Religions?", level: 2,
+          talk: "They're not all saying the same thing — they make mutually exclusive claims. The question is which can be examined historically. Only Christianity is staked on a publicly witnessed, falsifiable event. And Galatians 1:8 — written AD 50, 600 years before Islam — already warned: even an angel with a new gospel is to be rejected.",
+          children: [
+            { label: "Mutually exclusive claims — they can't all be right", level: 3, detail: "Islam says Jesus did not die on the cross. Christianity says He did. Both cannot be true. These are not complementary perspectives — they are mutually exclusive truth claims. The question is not which is most tolerant. It is which is true." },
+            { label: "Only Christianity staked on a verifiable historical event", level: 3, detail: "Every major religion's founding events are either private or prehistoric. Christianity's central claim — the resurrection — is a public, dateable, geographically specific event witnessed by 500+ people Paul says were still alive. It can be investigated. It has been. It survives." },
+            { label: "Galatians 1:8 — written before Islam and Mormonism, preempts both", level: 3, detail: "Paul writes in Galatians 1:8: 'Even if an angel from heaven should preach a gospel contrary to what we preached, let him be accursed.' Written AD 50 — 600 years before Islam (founded on an angelic vision) and 1,800 years before Mormonism (founded on an angelic visit). The Bible preemptively placed both in the category of things to reject." },
+            { label: "Resurrection uniquely distinguishes Christianity", level: 3, detail: "No other religion claims its founder rose bodily from the dead and was seen by hundreds of witnesses. Muhammad died and remains dead. Buddha died and remains dead. The resurrection of Jesus is Christianity's unique, falsifiable, historically documented claim. If it happened, Christianity is not one option among many — it is the truth." },
+          ]
+        },
+      ]
+    },
+    {
+      label: "The Conversation", level: 1,
+      talk: "The goal is never to win an argument. It's to love a person toward truth. Gentleness and respect — 1 Peter 3:15. Your life is part of the argument. Plant and water. God brings the growth.",
+      children: [
+        { label: "Koukl's Three Questions", level: 2,
+          talk: "What do you mean by that? How did you come to that conclusion? Have you considered...? These three questions put you in the conversation without being combative. Most objections dissolve under precision. You don't need all the answers — you just need good questions.",
+          children: [
+            { label: "'What do you mean by that?' — objections dissolve under precision", level: 3, detail: "Most objections to Christianity are vague. 'Religion causes violence.' 'The Bible is full of contradictions.' Ask: 'What do you mean specifically?' In almost every case, the objection either becomes much smaller under scrutiny, or the person realises they haven't thought it through carefully." },
+            { label: "'How did you come to that conclusion?' — reveals the reasoning", level: 3, detail: "This question is genuinely curious, not aggressive. It invites the person to examine their own reasoning. Often people hold strong positions they have never examined. This question creates space for honest reflection without you doing the challenging — they do it themselves." },
+            { label: "'What would change your mind?' — evidence or preference?", level: 3, detail: "The most diagnostic question in apologetics. If the answer is 'nothing,' you are not in an evidence conversation. You are in a values conversation — requiring a different approach. If they give an honest answer, you now know exactly what evidence to bring." },
+          ]
+        },
+        { label: "Tone & Posture", level: 2,
+          talk: "Curiosity over combat. The person matters more than the point. And here is the most important thing: you are not the one doing this. The Spirit goes before you, works through you, and accomplishes what no argument ever could. Your job is not to be clever — it is to be available. Not lofty speech. Not persuasive words of human wisdom. Just faithfulness, gentleness, and trust that God will do what only God can do.",
+          children: [
+            { label: "Gentleness and respect — 1 Peter 3:15", level: 3, detail: "The full verse: 'Always be prepared to give an answer for the hope that you have — but do this with gentleness and respect.' Both halves are commanded. The argument and the attitude. You can be right and still be wrong in your manner. Gentleness is not weakness — it is the posture of someone who knows the outcome belongs to God." },
+            { label: "Not by might nor by power but by My Spirit — Zechariah 4:6", level: 3, detail: "God's word to Zerubbabel: 'Not by might nor by power, but by My Spirit, says the Lord Almighty.' What applies to building the temple applies to every kingdom conversation. You are not the architect of anyone's salvation. You are a vessel. The Spirit is the power. Enter every conversation with that settled in your soul." },
+            { label: "I did not come with lofty speech or wisdom — 1 Corinthians 2:1-5", level: 3, detail: "Paul to the Corinthians: 'I did not come with eloquence or human wisdom... my message and my preaching were not with wise and persuasive words, but with a demonstration of the Spirit's power, so that your faith might not rest on human wisdom, but on God's power.' The goal is never to win with words. The goal is to be faithful enough that the Spirit has room to move." },
+            { label: "God gives the words — Matthew 10:19-20", level: 3, detail: "Jesus to His disciples before sending them out: 'Do not worry about what to say or how to say it. At that time you will be given what to say, for it will not be you speaking, but the Spirit of your Father speaking through you.' This is not an excuse to be unprepared — it is a promise to be claimed in the moment. Study hard. Then trust completely." },
+            { label: "Pray for boldness — Acts 4:29-31", level: 3, detail: "After Peter and John were threatened by the Sanhedrin, the early church prayed not for safety but for boldness: 'Enable your servants to speak your word with great boldness.' And the place was shaken and they were filled with the Holy Spirit and spoke the word of God boldly. Boldness is not a personality trait — it is a gift given in response to prayer. Ask for it before every hard conversation." },
+            { label: "Plant and water — God brings the growth — 1 Cor 3:6-7", level: 3, detail: "Paul: 'I planted, Apollos watered, but God has been making it grow. Neither the one who plants nor the one who waters is anything — only God, who makes things grow.' Your job is faithfulness. The pressure of conversion was never yours to carry. Release it — and your conversations will become lighter, more genuine, and more effective." },
+            { label: "Your life is the most powerful argument you have", level: 3, detail: "The early church spread not primarily through clever debate but through the visible quality of Christian community. Tertullian records pagans said: 'See how they love one another.' A life genuinely transformed by the Gospel is an argument that cannot be answered by logic alone. Be the evidence before you open your mouth." },
+          ]
+        },
+      ]
+    },
+  ]
+};
+
+// ══════════════════════════════════════════════════
+// MODAL SUMMARIES
+// ══════════════════════════════════════════════════
+const l2Summary = `The case is simple and it is sufficient. The universe began — and beginnings demand a cause outside themselves, something timeless and personal. A personal God would not stay silent; every culture in history confirms that the reaching never stops. Then one man stepped into that silence and said <em>I am the answer</em> — and backed the claim with an empty tomb, five hundred witnesses, and the conversion of His own enemies. Every alternative explanation for that tomb has been tried and every one has failed. If He rose, He is who He said He was. And if He is who He said He was, then what He said about everything else — Scripture, salvation, eternity — carries the full weight of God. The only remaining question is personal: <em>what will you do with the man from Nazareth?</em>`;
+
+const l3Summary = `Across every layer of evidence — cosmological, philosophical, historical, textual, prophetic — the arrow points in one direction. The universe had a beginning that physics cannot explain from within itself. The fine-tuning of physical constants is so precise that the world's most committed atheists have been forced to acknowledge the appearance of design. The moral intuition that evil is genuinely evil requires a lawgiver outside the universe. Consciousness remains entirely unexplained by material science. Every culture without exception has reached upward. And then, in a specific place and time, a man claimed to be the answer to all of that reaching — claimed to be God in the flesh, forgave sins, accepted worship, spoke with the authority of the divine. Five hundred people saw Him after His death. His enemies never produced a body. His own brother, who doubted Him in life, died for Him after the resurrection. The documents recording all of this survive in more copies, with more early attestation, than any text from the ancient world. Prophecies written centuries before His birth describe His life, death, and resurrection with a precision that chance cannot account for. <em>The evidence does not whisper. It speaks — and it says His name is Jesus.</em>`;
+
+// ══════════════════════════════════════════════════
+// MODAL BUILDERS
+// ══════════════════════════════════════════════════
+function buildModalL2() {
+  const body = document.getElementById('modal-l2-body');
+  body.innerHTML = '';
+  function walk(node) {
+    if ((node.level === 1 || node.level === 2) && node.talk) {
+      const sec = document.createElement('div');
+      sec.className = 'flow-section';
+      sec.innerHTML = `<div class="flow-node-label">${node.label}</div><div class="flow-talk">${node.talk}</div>`;
+      body.appendChild(sec);
+    }
+    if (node.children) node.children.forEach(walk);
+  }
+  data.children.forEach(walk);
+  appendSummary(body, l2Summary, 'l2');
+}
+
+function buildModalL3() {
+  const body = document.getElementById('modal-l3-body');
+  body.innerHTML = '';
+  function walk(node) {
+    if (node.level === 2 && node.children && node.children.length > 0) {
+      const sec = document.createElement('div');
+      sec.className = 'flow-section';
+      let html = `<div class="flow-node-label">${node.label}</div>`;
+      if (node.talk) html += `<div class="flow-talk">${node.talk}</div>`;
+      html += '<ul class="flow-bullets">';
+      node.children.forEach(c => { html += `<li>${c.label}</li>`; });
+      html += '</ul>';
+      sec.innerHTML = html;
+      body.appendChild(sec);
+    }
+    if (node.children) node.children.forEach(walk);
+  }
+  data.children.forEach(walk);
+  appendSummary(body, l3Summary, 'l3');
+}
+
+function appendSummary(body, text, layer) {
+  const sum = document.createElement('div');
+  sum.className = 'modal-summary';
+  sum.innerHTML = `<div class="modal-summary-label">Summary</div><div class="modal-summary-text">${text}</div>`;
+  const cb = document.createElement('button');
+  cb.className = 'modal-summary-close'; cb.textContent = 'close';
+  cb.onclick = () => closeModal(layer);
+  sum.appendChild(cb); body.appendChild(sum);
+}
+
+function openModal(layer) {
+  if (layer === 'l2') { buildModalL2(); }
+  if (layer === 'l3') { buildModalL3(); }
+  document.getElementById('modal-' + layer).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(layer) {
+  document.getElementById('modal-' + layer).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('modal-l2').addEventListener('click', function(e){ if(e.target===this) closeModal('l2'); });
+document.getElementById('modal-l3').addEventListener('click', function(e){ if(e.target===this) closeModal('l3'); });
+document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeModal('l2'); closeModal('l3'); } });
+
+// ══════════════════════════════════════════════════
+// DESKTOP L4 TOOLTIP
+// ══════════════════════════════════════════════════
+const popup = document.getElementById('l4-popup');
+const popupText = document.getElementById('l4-popup-text');
+let hideTimer = null;
+
+function showPopup(el, text) {
+  clearTimeout(hideTimer);
+  popupText.innerHTML = text;
+  popup.classList.add('visible');
+  positionPopup(el);
+}
+function positionPopup(el) {
+  const rect = el.getBoundingClientRect();
+  const pw = 300, ph = popup.offsetHeight || 120;
+  let left = rect.right + 12, top = rect.top;
+  if (left + pw > window.innerWidth - 16) left = rect.left - pw - 12;
+  if (top + ph > window.innerHeight - 16) top = window.innerHeight - ph - 16;
+  if (top < 8) top = 8;
+  popup.style.left = left + 'px'; popup.style.top = top + 'px';
+}
+function hidePopup() { hideTimer = setTimeout(() => popup.classList.remove('visible'), 80); }
+
+// ══════════════════════════════════════════════════
+// BUILD DESKTOP TREE
+// ══════════════════════════════════════════════════
+function buildTalkPanelD(talk, note) {
+  const panel = document.createElement('div'); panel.className = 'talk-panel-d';
+  const hl = document.createElement('div'); hl.className = 'h-line-d l'; panel.appendChild(hl);
+  const tn = document.createElement('div'); tn.className = 'talk-node-d';
+  tn.innerHTML = talk + (note ? `<div class="talk-note-d">↳ ${note}</div>` : '');
+  panel.appendChild(tn); return panel;
+}
+
+function buildNodeD(nodeData) {
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'display:flex;flex-direction:column';
+  const row = document.createElement('div'); row.className = 'node-row-h';
+  const hl = document.createElement('div'); hl.className = 'h-line-d s'; row.appendChild(hl);
+
+  const pill = document.createElement('div');
+  pill.className = `node l${nodeData.level}-d`;
+
+  const ls = document.createElement('span'); ls.textContent = nodeData.label; pill.appendChild(ls);
+
+  const hasChildren = nodeData.children && nodeData.children.length > 0;
+  const hasTalk = !!nodeData.talk;
+  const hasDetail = !!nodeData.detail;
+
+  if (nodeData.level === 3 && hasDetail) {
+    const dot = document.createElement('span'); dot.className = 'dot-hint'; pill.appendChild(dot);
+  }
+  if (hasChildren || hasTalk) {
+    const arr = document.createElement('span'); arr.className = 'arr'; arr.textContent = '▶'; pill.appendChild(arr);
+  }
+
+  row.appendChild(pill); wrapper.appendChild(row);
+
+  if (nodeData.level === 3 && hasDetail) {
+    pill.addEventListener('mouseenter', () => showPopup(pill, nodeData.detail));
+    pill.addEventListener('mouseleave', hidePopup);
+    pill.addEventListener('click', () => popup.classList.contains('visible') ? popup.classList.remove('visible') : showPopup(pill, nodeData.detail));
+  }
+
+  let talkPanel = null;
+  if (hasTalk) { talkPanel = buildTalkPanelD(nodeData.talk, nodeData.note||null); wrapper.appendChild(talkPanel); }
+
+  let childrenEl = null;
+  if (hasChildren) {
+    const vb = document.createElement('div'); vb.className = 'v-bracket-d';
+    childrenEl = document.createElement('div'); childrenEl.className = 'ch-d';
+    nodeData.children.forEach(c => childrenEl.appendChild(buildNodeD(c)));
+    vb.appendChild(childrenEl); wrapper.appendChild(vb);
+  }
+
+  if ((hasChildren || hasTalk) && nodeData.level !== 3) {
+    pill.addEventListener('click', () => {
+      const isOpen = pill.classList.contains('open');
+      pill.classList.toggle('open', !isOpen);
+      if (talkPanel) talkPanel.classList.toggle('open', !isOpen);
+      if (childrenEl) childrenEl.classList.toggle('open', !isOpen);
+    });
+  }
+  return wrapper;
+}
+
+// ══════════════════════════════════════════════════
+// BUILD MOBILE TREE
+// ══════════════════════════════════════════════════
+function buildMobile() {
+  const container = document.getElementById('mobile-tree');
+  data.children.forEach(l1 => {
+    const section = document.createElement('div'); section.className = 'm-section';
+
+    // L1 header
+    const l1El = document.createElement('div'); l1El.className = 'm-l1';
+    l1El.innerHTML = `<div class="m-l1-dot"></div><div class="m-l1-label">${l1.label}</div><span class="m-l1-arr">▶</span>`;
+
+    // L1 talk
+    const l1Talk = document.createElement('div'); l1Talk.className = 'm-l1-talk';
+    if (l1.talk) l1Talk.innerHTML = `<div class="m-talk-label">conversation</div><div class="m-talk-text">${l1.talk}</div>${l1.note ? `<div class="m-talk-note">↳ ${l1.note}</div>` : ''}`;
+
+    // L1 children
+    const l1Kids = document.createElement('div'); l1Kids.className = 'm-l1-children';
+
+    if (l1.children) {
+      l1.children.forEach(l2 => {
+        const branch = document.createElement('div'); branch.className = 'm-branch';
+
+        // L2 header
+        const l2El = document.createElement('div'); l2El.className = 'm-l2';
+        l2El.innerHTML = `<div class="m-l2-dot"></div><div class="m-l2-label">${l2.label}</div><span class="m-l2-arr">▶</span>`;
+
+        // L2 talk
+        const l2Talk = document.createElement('div'); l2Talk.className = 'm-l2-talk';
+        if (l2.talk) l2Talk.innerHTML = `<div class="m-talk-label">conversation</div><div class="m-talk-text">${l2.talk}</div>`;
+
+        // L2 children
+        const l2Kids = document.createElement('div'); l2Kids.className = 'm-l2-children';
+
+        if (l2.children) {
+          l2.children.forEach(l3 => {
+            const leaf = document.createElement('div'); leaf.className = 'm-leaf';
+            leaf.innerHTML = `<div class="m-leaf-dot"></div><div class="m-leaf-label">${l3.label}</div>${l3.detail ? '<span class="m-leaf-hint">tap</span>' : ''}`;
+
+            const detail = document.createElement('div'); detail.className = 'm-detail';
+            if (l3.detail) detail.innerHTML = `<div class="m-detail-text">${l3.detail}</div>`;
+
+            if (l3.detail) {
+              leaf.addEventListener('click', () => {
+                const isOpen = leaf.classList.contains('open');
+                leaf.classList.toggle('open', !isOpen);
+              });
+            }
+            l2Kids.appendChild(leaf);
+            l2Kids.appendChild(detail);
+          });
+        }
+
+        l2El.addEventListener('click', () => branch.classList.toggle('open'));
+        branch.appendChild(l2El);
+        branch.appendChild(l2Talk);
+        branch.appendChild(l2Kids);
+        l1Kids.appendChild(branch);
+      });
+    }
+
+    l1El.addEventListener('click', () => section.classList.toggle('open'));
+    section.appendChild(l1El);
+    section.appendChild(l1Talk);
+    section.appendChild(l1Kids);
+    container.appendChild(section);
+  });
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+// Desktop
+const dtree = document.getElementById('desktop-tree');
+const wrap = document.createElement('div'); wrap.className = 'tree';
+const rootRow = document.createElement('div'); rootRow.className = 'node-row-h';
+const rootPill = document.createElement('div'); rootPill.className = 'node l0-d';
+rootPill.textContent = data.label; rootRow.appendChild(rootPill);
+const rootCol = document.createElement('div'); rootCol.appendChild(rootRow); wrap.appendChild(rootCol);
+const topHL = document.createElement('div'); topHL.className = 'h-line-d m'; topHL.style.alignSelf = 'center';
+const rb = document.createElement('div'); rb.style.cssText = 'display:flex;align-items:flex-start';
+const topVB = document.createElement('div'); topVB.className = 'v-bracket-d'; topVB.style.cssText = 'margin-left:0;padding-left:24px';
+const topCh = document.createElement('div'); topCh.className = 'ch-d open'; topCh.style.flexDirection = 'column';
+data.children.forEach(c => topCh.appendChild(buildNodeD(c)));
+topVB.appendChild(topCh); rb.appendChild(topHL); rb.appendChild(topVB); wrap.appendChild(rb);
+dtree.appendChild(wrap);
+
+// Show desktop legend
+if (window.innerWidth >= 768) document.getElementById('desktop-legend').style.display = 'flex';
+
+// Mobile
+buildMobile();
+
+// ── INLINE PWA MANIFEST (no external file needed) ──
+const manifestData = {
+  name: "Jesus Is God — Apologetics",
+  short_name: "Apologetics",
+  description: "A layered apologetics conversation guide",
+  start_url: "./",
+  display: "standalone",
+  background_color: "#0a0a0a",
+  theme_color: "#0a0a0a",
+  orientation: "portrait-primary",
+  icons: [{
+    src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%230a0a0a'/%3E%3Ctext x='96' y='130' text-anchor='middle' font-size='100' fill='%23c9a84c'%3E%E2%9C%9D%3C/text%3E%3C/svg%3E",
+    sizes: "192x192",
+    type: "image/svg+xml",
+    purpose: "any maskable"
+  }]
+};
+const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/manifest+json'});
+document.getElementById('pwa-manifest').href = URL.createObjectURL(manifestBlob);
+
+// ── INLINE SERVICE WORKER (offline support, no external file) ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    const swCode = `
+const CACHE = 'apol-v5';
+self.addEventListener('install', e => {
+  self.skipWaiting();
+  e.waitUntil(caches.open(CACHE).then(c => c.add('/')));
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(clients.claim());
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+      const clone = res.clone();
+      caches.open(CACHE).then(c => c.put(e.request, clone));
+      return res;
+    }).catch(() => caches.match('/'))
+  );
+});`;
+    const swBlob = new Blob([swCode], {type: 'application/javascript'});
+    const swUrl = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
